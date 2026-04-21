@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@leon-rg</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #e8e8e8;
+      --muted: #666;
+      --accent: #c8c8c8;
+      --tag-bg: rgba(255,255,255,0.05);
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Geist', sans-serif;
+      font-weight: 300;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 4rem 1.5rem;
+      gap: 4rem;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .handle {
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .handle span {
+      color: var(--muted);
+    }
+
+    .tagline {
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── Projects grid ── */
+    .section-label {
+      font-family: 'Cascadia Code', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+      align-self: flex-start;
+      max-width: 640px;
+      width: 100%;
+    }
+
+    .grid-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* ── Card ── */
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1.1rem 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s, transform 0.18s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.015) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      background: #1c1c1c;
+      transform: translateY(-2px);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .card-icon {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .card-arrow {
+      font-size: 0.75rem;
+      color: var(--muted);
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .card:hover .card-arrow {
+      color: var(--accent);
+      transform: translate(2px, -2px);
+    }
+
+    .card-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .card-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.2rem;
+    }
+
+    .tag {
+      font-family: 'Cascadia Code', monospace;
+      font-size: 0.65rem;
+      padding: 2px 7px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* ── "Próximamente" card ── */
+    .card.soon {
+      border-style: dashed;
+      cursor: default;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .card.soon .card-title {
+      color: var(--muted);
+    }
+
+    /* ── Footer ── */
+    footer {
+      font-family: 'Cascadia Code', monospace;
+      font-size: 0.68rem;
+      color: #333;
+      letter-spacing: 0.05em;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Stagger cards */
+    .card { animation: fadeUp 0.5s ease both; }
+    .card:nth-child(1) { animation-delay: 0.20s; }
+    .card:nth-child(2) { animation-delay: 0.28s; }
+    .card:nth-child(3) { animation-delay: 0.36s; }
+    .card:nth-child(4) { animation-delay: 0.44s; }
+    .card:nth-child(5) { animation-delay: 0.52s; }
+    .card:nth-child(6) { animation-delay: 0.60s; }
+
+    @media (max-width: 480px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Canvas background ── */
+    #bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    body > *:not(#bg) {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <header>
+    <div class="handle"><span>@</span>leon-rg</div>
+    <div class="tagline">proyectos &amp; demás</div>
+  </header>
+
+  <div class="grid-wrapper">
+
+    <div class="grid" id="projects-grid">
+
+      <a class="card" href="https://leon-rg.github.io/main-page/" target="_blank" rel="noopener">
+        <div class="card-top">
+          <span class="card-icon">👤</span>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-title">main-page</div>
+        <div class="card-desc">Página principal.</div>
+        <div class="card-tags">
+          <span class="tag">about</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://leon-rg.github.io/triplets/" target="_blank" rel="noopener">
+        <div class="card-top">
+          <span class="card-icon">🎲</span>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-title">Tripletas</div>
+        <div class="card-desc">Un sencillo juego con números.</div>
+        <div class="card-tags">
+          <span class="tag">game</span>
+          <span class="tag">numbers</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://leon-rg.github.io/SimpleQRGenerator/" target="_blank" rel="noopener">
+        <div class="card-top">
+          <span class="card-icon">⬛</span>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-title">QR Generator</div>
+        <div class="card-desc">Generador de códigos QR sin acortadores innecesarios.</div>
+        <div class="card-tags">
+          <span class="tag">tool</span>
+          <span class="tag">web</span>
+        </div>
+      </a>
+
+      <div class="card soon">
+        <div class="card-top">
+          <span class="card-icon">⋯</span>
+        </div>
+        <div class="card-title">próximamente</div>
+        <div class="card-desc">Más cosas en camino.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>leon-rg.github.io</footer>
+
+<script>
+(function () {
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+
+  const P = new Uint8Array(512);
+  const base = new Float32Array(256).map(() => Math.random());
+  for (let i = 0; i < 256; i++) P[i] = P[i + 256] = i;
+  
+  for (let i = 255; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [P[i], P[j]] = [P[j], P[i]];
+    [P[i+256], P[j+256]] = [P[j+256], P[i+256]];
+  }
+
+  function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+  function lerp(a, b, t) { return a + t * (b - a); }
+
+  function noise2(x, y) {
+    const xi = Math.floor(x) & 255;
+    const yi = Math.floor(y) & 255;
+    const xf = x - Math.floor(x);
+    const yf = y - Math.floor(y);
+    const u = fade(xf), v = fade(yf);
+    const n00 = base[P[P[xi]     + yi    ] & 255];
+    const n10 = base[P[P[xi + 1] + yi    ] & 255];
+    const n01 = base[P[P[xi]     + yi + 1] & 255];
+    const n11 = base[P[P[xi + 1] + yi + 1] & 255];
+    return lerp(lerp(n00, n10, u), lerp(n01, n11, u), v);
+  }
+
+  function fbm(x, y, octaves) {
+    let val = 0, amp = 0.5, freq = 1, max = 0;
+    for (let i = 0; i < octaves; i++) {
+      val += noise2(x * freq, y * freq) * amp;
+      max += amp;
+      amp *= 0.5;
+      freq *= 2.1;
+    }
+    return val / max;
+  }
+
+  let W, H, imageData, data, t = 0;
+  const SCALE = 0.0018;   
+  const SPEED = 0.00018;  
+  const WARP  = 3.2;      
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    imageData = ctx.createImageData(W, H);
+    data = imageData.data;
+  }
+
+  function draw() {
+    const w = W, h = H;
+
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const nx = x * SCALE;
+        const ny = y * SCALE;
+
+        const wx = fbm(nx + 0.0,        ny + 0.0,        4) * WARP;
+        const wy = fbm(nx + 5.2 + t,    ny + 1.3 + t,    4) * WARP;
+        const n  = fbm(nx + wx + t * 0.4, ny + wy + t * 0.3, 5);
+
+        const bright = Math.round(13 + n * n * 28);
+
+        const idx = (y * w + x) * 4;
+        data[idx]     = bright;
+        data[idx + 1] = bright;
+        data[idx + 2] = bright;
+        data[idx + 3] = 255;
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    t += SPEED;
+    requestAnimationFrame(draw);
+  }
+
+  const DOWNSAMPLE = 3;
+  function resizeLow() {
+    W = Math.ceil(window.innerWidth  / DOWNSAMPLE);
+    H = Math.ceil(window.innerHeight / DOWNSAMPLE);
+    canvas.width  = W;
+    canvas.height = H;
+    canvas.style.imageRendering = 'pixelated';
+    imageData = ctx.createImageData(W, H);
+    data = imageData.data;
+  }
+
+  window.addEventListener('resize', resizeLow);
+  resizeLow();
+  draw();
+})();
+</script>
+
+</body>
+</html>
